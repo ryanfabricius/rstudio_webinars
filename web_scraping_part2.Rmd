@@ -46,7 +46,7 @@ After looking through some of the content, I realized that the cast names starte
 
 ```{r}
 # Create list of indices to extract cast from links.content
-name.indices <- seq(190, 232, 3)
+name.indices <- seq(190, 230, 3)
 
 # Extract Cast and surrounding area in between
 cast.raw <- links.content[name.indices]
@@ -67,6 +67,22 @@ cast <- cast.raw.retrieved %>%
 # View cast
 cast
 ```
+
+I will do the same exercise again, but this time I will use selectorGadget.
+SelectorGadget is an extension in chrome that displays the css selectors for the item on the screen your mouse is hovering over. 
+```{r}
+# Css selector for cast names
+css <- "td a"
+
+# Extract nodes using css selector
+cast.css.selected <- html_nodes(frozen, css = css)
+
+# View content from selected nodes
+html_text(cast.css.selected)
+```
+
+The content displayed was the same as the content in cast.raw. Using selectorGadget saved me the time looking through the source code and searching for the indices in the list of links.
+
 
 
 
