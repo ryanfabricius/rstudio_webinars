@@ -1,0 +1,83 @@
+---
+title: "web_scraping_part2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Scrape data from the web (non API)
+Rstudio Essentials
+Watched 4/28/20
+
+I have no experience with web scraping before these two webinars.
+
+```{r}
+# load libraries
+library(rvest)
+library(xml2)
+library(stringr)
+library(dplyr)
+```
+
+There is a basic workflow when web scraping.  
+
+1. Download the HTML and turn it into an XML file with read_html()  
+2. Extract specific nodes with html_nodes()  
+3. Extract content from nodes with html_text(), html_name(), html_attrs(), html_children_(), html_table()
+
+The website has changed since the Webinar was created. The example in the video ended up not working. After learning more about rvest, HTML, and CSS, I was able to retrieve the cast with the following code.
+```{r}
+# 1. Downlload HTML, convert to XML
+frozen <- read_html("http://www.imdb.com/title/tt2294629/")
+
+# 2. Extract specific nodes with html_nodes()
+# Each cast name was now encoded as a hyperlink with no CSS in the source code
+# Using html_nodes I will extract all links
+links <- html_nodes(frozen, "a")
+
+# 3. Extract content from nodes
+links.content <- html_text(links)
+links.content[190:230]
+```
+
+After looking through some of the content, I realized that the cast names started at lines 290 and ended at 230. Using these indices, and the knowledge that each character string begins with a space, the names are easily retrievable with string manipulation.
+
+```{r}
+# Create list of indices to extract cast from links.content
+name.indices <- seq(190, 232, 3)
+
+# Extract Cast and surrounding area in between
+cast.raw <- links.content[name.indices]
+
+# Narrow cast.raw to only cast memebers
+cast.raw.retrieved <- str_subset(cast.raw, "^ ")
+cast.raw.retrieved
+```
+
+Now that only cast members are retrieved, I can clean up the strings for the final product
+
+```{r}
+# Eliminate space in front of names and \n at the end
+cast <- cast.raw.retrieved %>% 
+  str_replace("^ ", "") %>% 
+  str_replace("\n", "")
+
+# View cast
+cast
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
