@@ -1,6 +1,6 @@
 ---
-title: "web_scraping_part2"
-output: html_document
+title: "Web Scraping Part 2"
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ Watched 4/28/20
 
 I have no experience with web scraping before these two webinars.
 
-```{r}
+```{r, message=FALSE}
 # load libraries
 library(rvest)
 library(xml2)
